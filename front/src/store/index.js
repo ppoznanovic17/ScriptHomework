@@ -9,10 +9,15 @@ export default new Vuex.Store({
   state: {
     themes : [],
     comments: [],
+    users: [],
+    theme: '',
     user: ''
   },
   mutations: {
 
+    set_users: function (state, users) {
+      state.users = users
+    },
     set_themes: function (state, themes) {
       state.themes = themes
     },
@@ -22,6 +27,10 @@ export default new Vuex.Store({
     set_user: function (state, user) {
       state.user = user;
     },
+    set_theme: function (state, theme){
+      state.theme = theme
+    },
+
 
     add_theme: function (state, theme) {
       state.themes.push(theme);
@@ -70,7 +79,11 @@ export default new Vuex.Store({
   actions: {
 
     load_themes: function ({ commit }) {
-      fetch(  baseUrl+'theme', { method: 'get' }).then((response) => {
+      fetch(  baseUrl+'theme', { method: 'get'
+        , headers:{
+            'auth': localStorage.getItem('auth')
+
+        }}).then((response) => {
         if (!response.ok)
           alert( response.error().text());
 
@@ -89,13 +102,11 @@ export default new Vuex.Store({
 
     log_user: function ({commit}, user){
 
-      alert(user)
+
       fetch(baseUrl + `auth/log`, {
         method: 'post',
         headers: {
-          'Content-Type': 'application/json',
-          'auth' : 'tok',
-          'user' : 'aaa'
+          'Content-Type': 'application/json'
         },
         body: user
       }).then((response) => {
@@ -104,10 +115,12 @@ export default new Vuex.Store({
 
         return response.json();
       }).then((jsonData) => {
-        alert(jsonData.token)
+
         localStorage.setItem('auth', jsonData.token)
         localStorage.setItem('user', jsonData.username)
         localStorage.setItem('user_id', jsonData.id)
+        localStorage.setItem('pic', jsonData.picture)
+        localStorage.setItem('role', jsonData.role)
         commit('set_user', jsonData)
       }).catch((error) => {
         if (typeof error.text === 'function')
@@ -121,14 +134,88 @@ export default new Vuex.Store({
 
     },
 
-    load_users ({ commit }) {
+    load_theme ({ commit }, id) {
 
+      fetch(  baseUrl  + `theme/${id}`, { method: 'get'
+        , headers:{
+          'auth': localStorage.getItem('auth')
 
-
-
-      fetch(  '/wel/users', { method: 'get' }).then((response) => {
+        }}).then((response) => {
         if (!response.ok)
-          alert( response.error().text());
+
+
+          alert(response.clone().json().title)
+        return response.json()
+      }).then((jsonData) => {
+
+        commit('set_theme', jsonData)
+      }).catch((error) => {
+        alert('a')
+        if (typeof error.text === 'function')
+          error.text().then((errorMessage) => {
+
+            alert(errorMessage);
+          });
+        else{
+          alert('b')
+          alert(error);
+        }
+
+      });
+
+
+    },
+
+    load_comments: function ({ commit }, id) {
+      fetch(  baseUrl  + `comment/${id}`, { method: 'get'
+        , headers:{
+          'auth': localStorage.getItem('auth')
+
+        }}).then((response) => {
+        if (!response.ok)
+          throw response;
+
+        return response.json()
+      }).then((jsonData) => {
+        commit('set_comments', jsonData)
+      }).catch((error) => {
+        if (typeof error.text === 'function')
+          error.text().then((errorMessage) => {
+            alert(errorMessage);
+          });
+        else
+          alert(error);
+      });
+    },
+    load_comment: function ({ commit }, id) {
+      fetch(  baseUrl  + `comment/id/${id}`, { method: 'put'
+        , headers:{
+          'auth': localStorage.getItem('auth')
+
+        }}).then((response) => {
+        if (!response.ok)
+          throw response;
+
+        return response.json()
+      }).then((jsonData) => {
+        commit('set_comments', jsonData)
+      }).catch((error) => {
+        if (typeof error.text === 'function')
+          error.text().then((errorMessage) => {
+            alert(errorMessage);
+          });
+        else
+          alert(error);
+      });
+    },
+    load_users: function ({ commit }) {
+      fetch(  baseUrl  + `user`, { method: 'get'
+        , headers:{
+          'auth': localStorage.getItem('auth')
+
+        }}).then((response) => {
+        if (!response.ok)
+          throw response;
 
         return response.json()
       }).then((jsonData) => {
@@ -141,17 +228,60 @@ export default new Vuex.Store({
         else
           alert(error);
       });
-
-
     },
-    load_posts: function ({ commit }) {
-      fetch(  '/home/posts', { method: 'get' }).then((response) => {
+    load_user: function ({ commit },id) {
+      fetch(  baseUrl  + `user/${id}`, { method: 'get'
+        , headers:{
+          'auth': localStorage.getItem('auth')
+
+        }}).then((response) => {
         if (!response.ok)
           throw response;
 
         return response.json()
       }).then((jsonData) => {
-        commit('set_posts', jsonData)
+        commit('set_user', jsonData)
+      }).catch((error) => {
+        if (typeof error.text === 'function')
+          error.text().then((errorMessage) => {
+            alert(errorMessage);
+          });
+        else
+          alert(error);
+      });
+    },
+    new_comment: function({ commit }, post) {
+      fetch(baseUrl + `comment`, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth': localStorage.getItem('auth')
+        },
+        body: post
+      }).then((response) => {
+        if (!response.ok)
+          throw response;
+
+        return response.json();
+      }).then((jsonData) => {
+
+        commit('add_comment', jsonData);
+      }).catch((error) => {
+        if (typeof error.text === 'function')
+          error.text().then((errorMessage) => {
+            alert(errorMessage);
+          });
+        else
+          alert(error);
+      });
+    },
+    delete_comment: function({ commit }, id) {
+      fetch(  baseUrl  + `comment/${id}`, { method: 'delete'
+        , headers:{
+          'auth': localStorage.getItem('auth')
+
+        }}).then((jsonData) => {
+        commit('remove_comment', jsonData.id)
       }).catch((error) => {
         if (typeof error.text === 'function')
           error.text().then((errorMessage) => {
@@ -162,6 +292,7 @@ export default new Vuex.Store({
       });
     },
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     delete_post: function({ commit }, id) {
       fetch(`/profile/${id}`, { method: 'delete' }).then((response) => {
         if (!response.ok)
@@ -192,6 +323,7 @@ export default new Vuex.Store({
 
         return response.json();
       }).then((jsonData) => {
+
         commit('add_post', jsonData);
       }).catch((error) => {
         if (typeof error.text === 'function')

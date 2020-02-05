@@ -1,29 +1,35 @@
 <template>
-    <div class="body">
-        <div class="login-box">
-            <h1>Login</h1>
-            <div class="text-box">
-                <i class="fas fa-user"></i>
-                <input type="text" placeholder="Username" v-model="username">
-            </div>
+    <div>
+        <Header></Header>
+        <div class="body">
+            <div class="login-box">
+                <h1>Login</h1>
+                <div class="text-box">
+                    <i class="fas fa-user"></i>
+                    <input type="text" placeholder="Username" v-model="username">
+                </div>
 
-            <div class="text-box">
-                <i class="fas fa-lock"></i>
-                <input type="password" placeholder="Password" v-model="password">
-            </div>
+                <div class="text-box">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" placeholder="Password" v-model="password">
+                </div>
 
-            <input type="button" class="btn" value="Sign in" @click="logUser()">
+                <input type="button" class="btn" value="Sign in" @click="logUser()">
+            </div>
         </div>
     </div>
+
 
 </template>
 
 <script>
-
+    import Header from "@/components/Header";
     import {mapActions} from 'vuex';
-
     export default {
         name: "Login",
+        components: {
+            Header
+        },
         data() {
             return {
                 cssProps: {
@@ -37,12 +43,17 @@
         methods: {
             ...mapActions(['log_user']),
 
-            logUser: function (){
+            logUser:  function (){
                 const user = JSON.stringify({username: this.username, password: this.password});
-                this.log_user(user);
+                 this.log_user(user)
 
+                setTimeout(function(){
 
+                    if(localStorage.getItem('auth') != null){
 
+                        window.location = '/'
+                    }
+                }, 1500)
 
             },
         }

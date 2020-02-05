@@ -1,14 +1,15 @@
 <template>
 
-    <b-navbar toggleable="lg" type="dark" variant="info">
+    <b-navbar toggleable="lg" type="dark" variant="dark">
         <b-navbar-brand @click="goHome">Petar's project</b-navbar-brand>
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
         <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav>
-                <b-nav-item @click="goHome">Home</b-nav-item>
-                <b-nav-item href="#">Start  Theme</b-nav-item>
+                <b-nav-item @click="goHome" v-show="login">Home</b-nav-item>
+                <b-nav-item href="#" v-show="login">Start  Theme</b-nav-item>
+                <b-nav-item @click="goProfile" v-show="login">Profile</b-nav-item>
             </b-navbar-nav>
 
             <!-- Right aligned nav items -->
@@ -18,23 +19,53 @@
                     <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
                 </b-nav-form>
 
-                <b-nav-item href="#" right @click="goLog">Login</b-nav-item>
-                <b-nav-item href="#" right>Logout</b-nav-item>
+                <b-nav-item href="#" right @click="goLog" v-show="!login">Login</b-nav-item>
+                <b-nav-item href="#" right @click="goLogout" v-show="login">Logout</b-nav-item>
             </b-navbar-nav>
         </b-collapse>
     </b-navbar>
 </template>
 <script>
-
     export default {
         name: "Header",
         methods: {
             goLog: function() {
-                this.$router.push({ path: `/log` }) // -> /user/123
+                this.$router.push({ path: `/log` })
             },
             goHome: function () {
-                this.$router.push({ path: `` }) // -> /user/123
+                this.$router.push({ path: `/` })
+            },
+            goLogout: function () {
+                localStorage.removeItem('auth')
+                localStorage.removeItem('user')
+                localStorage.removeItem('user_id')
+                localStorage.removeItem('role')
+                localStorage.removeItem('pic')
+                this.login = false
+                this.$router.push({ path: `/log` })
+
+
+            },
+            isLog: function () {
+                if(localStorage.getItem('auth')){
+                    this.login = true
+                }else {
+                    this.login = false
+                }
+
+            },
+            goProfile: function () {
+                this.$router.push({ path: `../user/${localStorage.getItem('user_id')}` })
             }
+        },
+        data() {
+            return{
+                login: true
+            }
+        },
+        mounted : function ()
+         {
+            this.isLog()
         }
     }
 

@@ -1,7 +1,11 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from "@/components/Home";
+import Home from "@/views/Home";
 import Login from "@/views/Login";
+import ViewTheme from "@/views/ViewTheme";
+import User from "@/views/User";
+import EditComment from "@/views/EditComment";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -13,6 +17,21 @@ const routes = [
     path: '/log',
     name: 'login',
     component: Login
+  },
+  {
+    path: '/theme/:id',
+    name: 'view_theme',
+    component: ViewTheme
+  },
+  {
+    path: '/user/:id',
+    name: 'view_user',
+    component: User
+  },
+  {
+    path: '/comment/:id',
+    name: 'edit_comment',
+    component: EditComment
   }
 
 ];
