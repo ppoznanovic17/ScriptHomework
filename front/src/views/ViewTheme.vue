@@ -3,6 +3,7 @@
 
 
         <Header/>
+        <h1>START NEW THEME</h1>
         <div class="w3-card-4" style="width: 80%; margin: 35px auto">
 
             <header class="w3-container w3-light-grey">
@@ -21,7 +22,7 @@
 
             </div>
             <div v-show="isSameUser(theme.username)">
-                <button class="btn red" style="width: 100%" >Delete</button>
+                <label class="lbl" style="width: 100%" >SAVE</label>
 
             </div>
 
@@ -188,6 +189,11 @@
         background: #888888;
         color: black;
     }
+
+   .lbl{
+       background: black;
+       color: white;
+   }
 
    .green:hover{
        color: white;

@@ -67,10 +67,10 @@ export default new Vuex.Store({
       }
     },
     update_comment: function (state, payload) {
-      for (let p = 0; p < state.posts.length; p++) {
+      for (let p = 0; p < state.comments.length; p++) {
         if (state.comments[p].id === parseInt(payload.id)) {
-          state.comments[p].header = payload.msg.header;
-          state.comments[p].content = payload.msg.content;
+          state.comments[p].content = payload.text
+
           break;
         }
       }
@@ -188,7 +188,7 @@ export default new Vuex.Store({
       });
     },
     load_comment: function ({ commit }, id) {
-      fetch(  baseUrl  + `comment/id/${id}`, { method: 'put'
+      fetch(  baseUrl  + `comment/id/${id}`, { method: 'get'
         , headers:{
           'auth': localStorage.getItem('auth')
 
@@ -282,6 +282,57 @@ export default new Vuex.Store({
 
         }}).then((jsonData) => {
         commit('remove_comment', jsonData.id)
+      }).catch((error) => {
+        if (typeof error.text === 'function')
+          error.text().then((errorMessage) => {
+            alert(errorMessage);
+          });
+        else
+          alert(error);
+      });
+    },
+    change_comment: function({ commit }, payload) {
+
+      window.console.log(payload)
+      fetch(baseUrl + `comment/${payload.id}`, {
+        method: 'put',
+        headers: {
+          'Content-Type': 'application/json',
+          'auth': localStorage.getItem('auth')
+        },
+        body: payload.content
+      }).then((response) => {
+
+        if (!response.ok)
+          throw response;
+
+        return response.json();
+      }).then((jsonData) => {
+        commit('update_comment', {id: payload.id, content: jsonData});
+      }).catch((error) => {
+        if (typeof error.text === 'function')
+          error.text().then((errorMessage) => {
+            alert(errorMessage);
+          });
+        else
+          alert(error);
+      });
+    },
+    new_theme: function({ commit }, post) {
+      fetch(baseUrl + `theme/`, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: post
+      }).then((response) => {
+        if (!response.ok)
+          throw response;
+
+        return response.json();
+      }).then((jsonData) => {
+
+        commit('add_comment', jsonData);
       }).catch((error) => {
         if (typeof error.text === 'function')
           error.text().then((errorMessage) => {

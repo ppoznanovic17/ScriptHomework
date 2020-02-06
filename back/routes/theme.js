@@ -18,7 +18,9 @@ route.use(express.json())
 const sema = Joi.object().keys({
     content: Joi.string().trim().min(3).max(34).required(),
     title: Joi.string().trim().min(3).max(13).required(),
-    user_id: Joi.string().trim().required()
+    user_id: Joi.string().trim().required(),
+    username: Joi.string().trim().required(),
+    picture: Joi.string().trim().required()
 })
 
 const sema2 = Joi.object().keys({
@@ -41,7 +43,7 @@ route.get('/', auth ,(req, res) => {
     })
 })
 
-route.get('/:id', (req, res) => {
+route.get('/:id', auth,(req, res) => {
 
     let query = 'select * from theme where id=?'
     let formated = mysql.format(query, [req.params.id])
@@ -50,7 +52,7 @@ route.get('/:id', (req, res) => {
         if (err)
             res.status(500).send(err.sqlMessage)  // Greska servera
         else
-            res.send(rows[0])
+            res.send(rows[0]        )
     })
 })
 
@@ -64,10 +66,12 @@ route.post('/' ,(req, res) => {
         // Izgradimo SQL query string
 
         // username mora da bude jedinstven
+        let today = new Date().toISOString().slice(0, 10)
 
-        query = "insert into theme (title, content, user_id) values (?, ?, ?)"
 
-        let formated = mysql.format(query, [req.body.title, req.body.content, parseInt(req.body.user_id)])
+        query = "insert into theme (title, content, user_id, username, picture, date) values (?, ?, ?, ?, ?, ?)"
+
+        let formated = mysql.format(query, [req.body.title, req.body.content, parseInt(req.body.user_id), req.body.username,req.body.picture,today])
 
         // Izvrsimo query
         pool.query(formated, (err, response) => {

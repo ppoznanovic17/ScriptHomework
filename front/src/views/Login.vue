@@ -53,7 +53,7 @@
 
                         window.location = '/'
                     }
-                }, 1500)
+                }, 1200)
 
             },
         }
@@ -70,7 +70,7 @@
         background-size: cover;
         background-repeat: no-repeat;
         width: 100%;
-        height: 93vh;
+        height: 93.3vh;
     }
     .login-box{
         width: 280px;

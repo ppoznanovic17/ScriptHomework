@@ -18,7 +18,9 @@ route.use(express.json())
 const sema = Joi.object().keys({
     content: Joi.string().trim().min(3).max(34).required(),
     user_id: Joi.string().trim().required(),
-    theme_id: Joi.string().trim().required()
+    theme_id: Joi.string().trim().required(),
+    username: Joi.string().trim().required(),
+    picture: Joi.string().trim().required()
 })
 
 const sema2 = Joi.object().keys({
@@ -36,8 +38,7 @@ route.get('/', (req, res) => {
             res.send(rows)
     })
 })
-
-route.get('/:id', (req, res) => {
+route.get('/id/:id', (req, res) => {
 
     let query = 'select * from comment where id=?'
     let formated = mysql.format(query, [req.params.id])
@@ -46,7 +47,20 @@ route.get('/:id', (req, res) => {
         if (err)
             res.status(500).send(err.sqlMessage)  // Greska servera
         else
-            res.send(rows[0])
+            res.send(rows)
+    })
+})
+
+route.get('/:id', (req, res) => {
+
+    let query = 'select * from comment where theme_id=?'
+    let formated = mysql.format(query, [req.params.id])
+
+    pool.query(formated, (err, rows) => {
+        if (err)
+            res.status(500).send(err.sqlMessage)  // Greska servera
+        else
+            res.send(rows)
     })
 })
 
@@ -58,8 +72,11 @@ route.post('/' ,(req, res) => {
         res.status(400).send(error.details[0].message)  // Greska zahteva
     else {
 
-        query = "insert into comment (content, theme_id, user_id) values (?, ?, ?)"
-        let formated = mysql.format(query, [req.body.content,  parseInt(req.body.theme_id), parseInt(req.body.user_id)])
+        let today = new Date().toISOString().slice(0, 10)
+
+
+        query = "insert into comment (content, theme_id, user_id, username, picture, date) values (?, ?, ?, ?, ?, ?)"
+        let formated = mysql.format(query, [req.body.content,  parseInt(req.body.theme_id), parseInt(req.body.user_id), req.body.username, req.body.picture,today])
 
         // Izvrsimo query
         pool.query(formated, (err, response) => {

@@ -5,6 +5,7 @@ import Login from "@/views/Login";
 import ViewTheme from "@/views/ViewTheme";
 import User from "@/views/User";
 import EditComment from "@/views/EditComment";
+import NewTheme from "@/views/NewTheme";
 
 Vue.use(VueRouter);
 
@@ -32,6 +33,11 @@ const routes = [
     path: '/comment/:id',
     name: 'edit_comment',
     component: EditComment
+  },
+  {
+    path: '/new/theme',
+    name: 'new_theme',
+    component: NewTheme
   }
 
 ];

@@ -4,7 +4,7 @@
         <h1>Themes</h1>
         <br>
 
-        <div class="w3-card-4" style="width: 80%; margin: 35px auto" v-for="t in themes" :key="t.id">
+        <div class="w3-card-4" style="width: 80%; margin: 35px auto" v-for="t in themes.slice().reverse()" :key="t.id">
 
             <header class="w3-container w3-light-grey">
                 <h3>{{t.title}}</h3>
@@ -107,9 +107,10 @@
     }
 
     img{
+
         height: 80px;
         width: 80px;
-
+        margin-top: 3px;
 
     }
 

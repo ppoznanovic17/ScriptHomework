@@ -39,7 +39,7 @@ route.post('/reg' ,(req, res) => {
 
         // username mora da bude jedinstven
 
-         query = "insert into user (username, password, role) values (?, ?, ?)"
+        query = "insert into user (username, password, role) values (?, ?, ?)"
         let password = passwordHash.generate(req.body.password)
         let formated = mysql.format(query, [req.body.username, password, 'user'])
 
@@ -75,7 +75,7 @@ route.post('/log', (req, res) => {
         query = 'select * from user where username=?'
         formated = mysql.format(query, [req.body.username])
 
-         pool.query(formated,  (err, rows) => {
+        pool.query(formated,  (err, rows) => {
             if (err) {
                 return res.status(400).send(err)
 
@@ -88,7 +88,8 @@ route.post('/log', (req, res) => {
                 if ( passwordHash.verify(req.body.password, rows[0].password)){
                     const token = jwt.sign({_id: rows[0].id}, jwtsecret)
                     return res.set({'auth':token,
-                               'user': rows[0].username }).send({id: rows[0].id, token: token, username: rows[0].username})
+                        'user': rows[0].username }).send({id: rows[0].id, token: token, username: rows[0].username,
+                        picture: rows[0].picture, role: rows[0].role})
 
                 }else{
 
