@@ -1,0 +1,37 @@
+{% include 'partials/header.html' %}
+
+<h1>Users</h1>
+
+<table class="table">
+    <thead style="background-color: #555555">
+    <tr>
+        <th scope="col" style="color:white">#</th>
+        <th scope="col" style="color:white">Picture</th>
+        <th scope="col" style="color:white">Username</th>
+        <th scope="col" style="color:white">Role</th>
+        <th scope="col" style="color:white"></th>
+
+    </tr>
+    </thead>
+    <tbody>
+     {% for user in users %}
+
+        <tr>
+            <th scope="row">{{user.id}}</th>
+            <td><img src="{{user.picture}}" alt="picture" style="height: 70px"> </td>
+            <td>{{user.username}}</td>
+             <td>{{user.role}}</td>
+            <td><a  href="{% url 'deleteUser' user.id %}" class="btn btn-danger">Delete</a></td>
+
+
+        </tr>
+
+     {% endfor %}
+
+    </tbody>
+</table>
+
+
+
+
+{% include 'partials/footer.html' %}

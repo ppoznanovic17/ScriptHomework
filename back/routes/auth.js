@@ -109,7 +109,41 @@ route.post('/log', (req, res) => {
 })
 
 
+route.post('/reg/adm' ,(req, res) => {
 
+    let { error } = Joi.validate(req.body, sema)
+
+    if (error)
+        res.status(400).send(error.details[0].message)  // Greska zahteva
+    else {  // Ako nisu upisemo ih u bazu
+        // Izgradimo SQL query string
+
+        // username mora da bude jedinstven
+
+        query = "insert into user (username, password, role) values (?, ?, ?)"
+        let password = passwordHash.generate(req.body.password)
+        let formated = mysql.format(query, [req.body.username, password, 'admin'])
+
+        // Izvrsimo query
+        pool.query(formated, (err, response) => {
+            if (err)
+                res.status(500).send(err.sqlMessage)
+            else {
+                // Ako nema greske dohvatimo kreirani objekat iz baze i posaljemo ga korisniku
+                query = 'select * from user where id=?'
+                formated = mysql.format(query, [response.insertId])
+
+                pool.query(formated, (err, rows) => {
+                    if (err)
+                        res.status(500).send(err.sqlMessage)
+                    else
+                        res.send(rows[0])
+                })
+            }
+        })
+    }
+
+})
 
 
 module.exports = route

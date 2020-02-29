@@ -2,6 +2,7 @@
     <div>
     <Header/>
         <div class="div">
+            <h1>ADD NEW THEME</h1>
             <div>
                 <label for="a">Title:</label>
                 <br>
@@ -55,14 +56,14 @@
             ...mapActions(['new_theme']),
 
             addNew: function () {
-                if(this.title.length < 3 || this.title.length>15){
+                if(this.title.length < 3 || this.title.length>13){
                     this.msgbool = true
-                    this.msg = 'Title must be longer than 3 and shorter than 15 characters.'
+                    this.msg = 'Title must be longer than 3 and shorter than 13 characters.'
                     return
                 }
                 if(this.content.length < 3 || this.content.length>200){
                     this.msgbool = true
-                    this.msg = 'Content must be longer than 3 and shorter than 15 characters.'
+                    this.msg = 'Content must be longer than 3 and shorter than 200 characters.'
                     return
                 }
                 this.theme.content = this.content

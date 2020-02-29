@@ -34,7 +34,7 @@
           return{
               text: '',
               err: false,
-              msg: 'Comment content must have between 3 and 42 characters.'
+              msg: 'Comment content must have between 3 and 250 characters.'
           }
         },
         computed: {
@@ -46,7 +46,7 @@
             ...mapActions(['load_comment', 'change_comment']),
 
             editComment: function () {
-                if(this.text.length<3 || this.text.length>42){
+                if(this.text.length<3 || this.text.length>250){
                     this.err = true
                     return
 

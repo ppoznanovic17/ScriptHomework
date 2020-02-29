@@ -1,0 +1,23 @@
+{% include 'partials/header.html' %}
+<h1> Edit Task: </h1>
+    <hr>
+
+<form action="{% url 'editTheme' id %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.title.id_for_label }}"> {{ form.title.label_tag }}</label>
+            <input type="text" class="form-control" id="{{ form.title.id_for_label }}" name="{{ form.title.name }}" value="{{ form.title.value }}">
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.content.id_for_label }}"> {{ form.content.label_tag }}</label>
+            <input type="text" class="form-control" id="{{ form.content.id_for_label }}" name="{{ form.content.name }}" value="{{ form.content.value }}">
+        </div>
+
+        <input type="submit" value="Submit">
+    </form>
+
+
+
+
+{% include 'partials/footer.html' %}

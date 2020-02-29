@@ -1,4 +1,4 @@
-const express = require('express')
+/*const express = require('express')
 const Joi = require('joi')
 const mysql = require('mysql')
 const auth = require('../verifyJWT')
@@ -68,3 +68,4 @@ route.post('/', (req, res) => {
 
 
 module.exports = route
+*/

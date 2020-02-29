@@ -1,0 +1,45 @@
+{% include 'partials/header.html' %}
+<h1>Themes</h1>
+<table class="table">
+    <thead style="background-color: #555555">
+    <tr>
+        <th scope="col" style="color:white">#</th>
+        <th scope="col" style="color:white">Owner</th>
+        <th scope="col" style="color:white">Title</th>
+        <th scope="col" style="color:white">Content</th>
+        <th scope="col" style="color:white">Date</th>
+        <th scope="col" style="color:white">Likes</th>
+        <th scope="col" style="color:white">Dislikes</th>
+        <th scope="col" style="color:white"></th>
+    </tr>
+    </thead>
+    <tbody>
+     {% for theme in themes %}
+
+        <tr>
+            <th scope="row">{{theme.id}}</th>
+            <td>{{theme.username}}</td>
+            <td>{{theme.title}}</td>
+            <td>{{theme.content}}</td>
+            <td>{{theme.date}}</td>
+            <td><span style="color:green">{{theme.likes}}</span></td>
+            <td><span style="color:red">{{theme.dislikes}}</span></td>
+            <td><a href="{% url 'editTheme' theme.id %}" class="btn" style="background-color: black; color:white">Edit</a></td>
+
+        </tr>
+
+     {% endfor %}
+
+    </tbody>
+</table>
+
+
+
+
+
+
+{% include 'partials/footer.html' %}
+
+
+
+

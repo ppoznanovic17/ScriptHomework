@@ -16,7 +16,7 @@ const pool = mysql.createPool({
 route.use(express.json())
 
 const sema = Joi.object().keys({
-    content: Joi.string().trim().min(3).max(34).required(),
+    content: Joi.string().trim().min(3).max(200).required(),
     title: Joi.string().trim().min(3).max(13).required(),
     user_id: Joi.string().trim().required(),
     username: Joi.string().trim().required(),
@@ -24,7 +24,7 @@ const sema = Joi.object().keys({
 })
 
 const sema2 = Joi.object().keys({
-    content: Joi.string().trim().min(3).max(34).required(),
+    content: Joi.string().trim().min(3).max(200).required(),
     title: Joi.string().trim().min(3).max(13).required()
 })
 
@@ -67,11 +67,12 @@ route.post('/' ,(req, res) => {
 
         // username mora da bude jedinstven
         let today = new Date().toISOString().slice(0, 10)
+        let likes = Math.floor(Math.random() * 1000)
+        let dislikes = Math.floor(Math.random() * 1000)
 
+        query = "insert into theme (title, content, user_id, username, picture, date, likes, dislikes) values (?, ?, ?, ?, ?, ?, ?, ?)"
 
-        query = "insert into theme (title, content, user_id, username, picture, date) values (?, ?, ?, ?, ?, ?)"
-
-        let formated = mysql.format(query, [req.body.title, req.body.content, parseInt(req.body.user_id), req.body.username,req.body.picture,today])
+        let formated = mysql.format(query, [req.body.title, req.body.content, parseInt(req.body.user_id), req.body.username,req.body.picture,today, likes, dislikes])
 
         // Izvrsimo query
         pool.query(formated, (err, response) => {

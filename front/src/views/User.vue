@@ -8,7 +8,7 @@
                 <img :src="pic" alt="Avatar" style="width:100%">
                 <div class="container">
                     <h4><b>Username: {{username}}</b></h4>
-                    <p>Role: User</p>
+                    <p>Role: {{role}}</p>
                 </div>
             </div>
         </div>
@@ -30,7 +30,8 @@
         data()  {
             return{
                 username: localStorage.getItem('user'),
-                pic: localStorage.getItem('pic')
+                pic: localStorage.getItem('pic'),
+                role: localStorage.getItem('role')
             }
         },
         computed: {

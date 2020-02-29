@@ -21,7 +21,8 @@
                 </div>
 
             </div>
-
+            <p>  <span style="color: green">{{t.likes}}</span> <i class="fa fa-thumbs-up" style="font-size:20px;color:green"></i> | <i class="fa fa-thumbs-down" style="font-size:20px;color:red"></i> <span style="color: red">{{t.dislikes}}</span>   </p>
+            <a class="w3-button w3-block" style="background-color: black" @click="editTheme(t.id)" v-show="admin">Edit</a>
             <button class="w3-button w3-block w3-dark-grey" @click="viewTheme(t.id)">Show</button>
 
         </div>
@@ -52,10 +53,21 @@
 
                 this.$router.push({path: `../user/${id}`})
 
+            },
+            isAdmin: function () {
+                if(localStorage.getItem('role') === 'admin'){
+                    this.admin = true
+                }else {
+                    this.admin = false
+                }
+            },
+            editTheme: function (id) {
+                window.location = `http://localhost:8000/edit/${id}`
             }
 
         },
         mounted: function () {
+            this.isAdmin()
             if(localStorage.getItem('auth') == null){
                 this.$router.push('../log')
                 return
@@ -69,7 +81,8 @@
                     {msg: 'msg', mss: 'mss'},
                     {msg: 'msg2', mss: 'mss2'},
                     {msg: 'msg3', mss: 'mss3'}
-                ]
+                ],
+                admin:false
             }
 
         }

@@ -6,6 +6,7 @@ import ViewTheme from "@/views/ViewTheme";
 import User from "@/views/User";
 import EditComment from "@/views/EditComment";
 import NewTheme from "@/views/NewTheme";
+import Register from "@/views/Register";
 
 Vue.use(VueRouter);
 
@@ -38,6 +39,11 @@ const routes = [
     path: '/new/theme',
     name: 'new_theme',
     component: NewTheme
+  },
+  {
+    path: '/reg',
+    name: 'reg',
+    component: Register
   }
 
 ];

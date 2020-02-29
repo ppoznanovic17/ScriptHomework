@@ -19,6 +19,7 @@
                     <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
                 </b-nav-form>-->
 
+                <b-nav-item href="http://localhost:8000/" target="_blank" right  v-show="admin">Admin Panel</b-nav-item>
                 <b-nav-item href="#" right @click="goLog" v-show="!login">Login</b-nav-item>
                 <b-nav-item href="#" right @click="goLogout" v-show="login">Logout</b-nav-item>
             </b-navbar-nav>
@@ -31,6 +32,9 @@
         methods: {
             goLog: function() {
                 this.$router.push({ path: `/log` })
+            },
+            goRegister: function() {
+                this.$router.push({ path: `/reg` })
             },
             goHome: function () {
                 this.$router.push({ path: `/` })
@@ -59,16 +63,25 @@
             },
             goNewTheme: function () {
                 this.$router.push('../new/theme')
+            },
+            isAdmin: function () {
+                if(localStorage.getItem('role') === 'admin'){
+                    this.admin = true
+                }else {
+                    this.admin = false
+                }
             }
         },
         data() {
             return{
-                login: true
+                login: true,
+                admin: false
             }
         },
         mounted : function ()
          {
             this.isLog()
+             this.isAdmin()
         }
     }
 

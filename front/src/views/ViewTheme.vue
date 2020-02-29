@@ -3,7 +3,7 @@
 
 
         <Header/>
-        <h1>START NEW THEME</h1>
+        <h1>View Theme </h1>
         <div class="w3-card-4" style="width: 80%; margin: 35px auto">
 
             <header class="w3-container w3-light-grey">
@@ -21,9 +21,10 @@
                 </div>
 
             </div>
-            <div v-show="isSameUser(theme.username)">
-                <label class="lbl" style="width: 100%" >SAVE</label>
 
+            <p>  <span style="color: green">{{theme.likes}}</span> <i class="fa fa-thumbs-up" style="font-size:20px;color:green"></i> | <i class="fa fa-thumbs-down" style="font-size:20px;color:red"></i> <span style="color: red">{{theme.dislikes}}</span>   </p>
+            <div v-show="isSameUser(theme.username)">
+                <label class="lbl" style="width: 100%" >MY POST</label>
             </div>
 
 
@@ -59,7 +60,10 @@
                     {{com.content}}
                 </div>
                 <div style="flex-grow: 1">
-                    <p>{{com.date.slice(8,10)}}.{{com.date.slice(5,7)}}.{{com.date.slice(0,4)}}</p>
+                    <p>{{com.date.slice(8,10)}}.{{com.date.slice(5,7)}}.{{com.date.slice(0,4)}}  <strong v-show="com.edited">| Edited</strong>    </p>
+                </div>
+                <div style="flex-grow: 1">
+                    <p>  <span style="color: green">{{com.likes}}</span> <i class="fa fa-thumbs-up" style="font-size:20px;color:green"></i> | <i class="fa fa-thumbs-down" style="font-size:20px;color:red"></i> <span style="color: red">{{com.dislikes}}</span>   </p>
                 </div>
             </div>
 
@@ -110,7 +114,7 @@
                 }
             },
             addComment: function () {
-                if(this.text.length <150 && this.text.length>2){
+                if(this.text.length <250 && this.text.length>2){
                     this.comment.content = this.text
                     this.new_comment(JSON.stringify(this.comment))
                     window.console.log(JSON.stringify(this.comment))
@@ -118,7 +122,7 @@
                     this.text = ''
                 }else{
                     this.text = ''
-                    this.err = 'Comment length must be between 3 and 150 characters'
+                    this.err = 'Comment length must be between 3 and 250 characters'
                 }
 
             },
@@ -144,6 +148,9 @@
 </script>
 
 <style scoped>
+
+    @import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
+
    textarea, select {
         width: 100%;
         height: 80px    ;
